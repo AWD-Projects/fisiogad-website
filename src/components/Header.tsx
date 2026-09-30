@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import * as Dialog from "@radix-ui/react-dialog"
 import { Menu, X } from "lucide-react"
 import Image from "next/image"
@@ -10,34 +10,40 @@ import { cn } from "@/lib/utils"
 import { track } from "@/lib/analytics"
 
 const NAV = [
-  { name: "Inicio", href: "#hero" },
   { name: "Servicios", href: "#services" },
+  { name: "Cómo trabajamos", href: "#process" },
   { name: "Nosotros", href: "#about" },
   { name: "Testimonios", href: "#testimonials" },
   { name: "Preguntas", href: "#faq" },
-  { name: "Contacto", href: "#contact" },
 ]
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false)
+  const [hidden, setHidden] = useState(false)
   const [open, setOpen] = useState(false)
-  const [active, setActive] = useState("hero")
+  const [active, setActive] = useState("")
+  const last = useRef(0)
 
+  // Se oculta al bajar y reaparece al subir, para dejar el contenido libre.
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10)
+    const onScroll = () => {
+      const y = window.scrollY
+      setScrolled(y > 24)
+      setHidden(y > last.current && y > 320)
+      last.current = y
+    }
     onScroll()
     window.addEventListener("scroll", onScroll, { passive: true })
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
   useEffect(() => {
-    const ids = NAV.map((n) => n.href.slice(1))
     const io = new IntersectionObserver(
       (entries) => entries.forEach((e) => e.isIntersecting && setActive(e.target.id)),
       { rootMargin: "-45% 0px -50% 0px" }
     )
-    ids.forEach((id) => {
-      const el = document.getElementById(id)
+    NAV.forEach((n) => {
+      const el = document.getElementById(n.href.slice(1))
       if (el) io.observe(el)
     })
     return () => io.disconnect()
@@ -46,41 +52,41 @@ export default function Header() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-300",
-        scrolled ? "bg-background/90 py-3 shadow-sm backdrop-blur" : "bg-transparent py-6"
+        "fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-out",
+        scrolled ? "bg-background/90 py-3 backdrop-blur" : "py-6",
+        hidden && !open && "-translate-y-full"
       )}
     >
-      <div className="container flex items-center justify-between">
-        <Link href="/" aria-label="Fisiogad, inicio">
-          <Image
-            src={logo}
-            alt="Fisiogad"
-            priority
-            className={cn("w-auto transition-all duration-300", scrolled ? "h-11" : "h-14")}
-          />
-        </Link>
+      <div className="container flex items-center justify-between gap-8">
+        <div className="flex items-center gap-12">
+          <Link href="/" aria-label="Fisiogad, inicio">
+            <Image src={logo} alt="Fisiogad" priority className={cn("w-auto transition-all duration-500", scrolled ? "h-10" : "h-12")} />
+          </Link>
+          <nav aria-label="Principal" className="hidden xl:block">
+            <ul className="flex items-center gap-8">
+              {NAV.map((item) => (
+                <li key={item.name}>
+                  <a
+                    href={item.href}
+                    aria-current={active === item.href.slice(1) ? "true" : undefined}
+                    className={cn(
+                      "link-line py-1 transition-colors",
+                      active === item.href.slice(1) ? "text-primary [background-size:100%_1px]" : "text-text hover:text-primary"
+                    )}
+                  >
+                    {item.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
 
-        <nav aria-label="Principal" className="hidden lg:block">
-          <ul className="flex items-center gap-7">
-            {NAV.map((item) => (
-              <li key={item.name}>
-                <a
-                  href={item.href}
-                  aria-current={active === item.href.slice(1) ? "true" : undefined}
-                  className={cn(
-                    "font-medium transition-colors hover:text-primary",
-                    active === item.href.slice(1) ? "text-primary" : "text-text"
-                  )}
-                >
-                  {item.name}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <div className="hidden lg:block">
-          <Button asChild>
+        <div className="hidden xl:block">
+          <Button
+            asChild
+            className={cn(!scrolled && "bg-background text-primary hover:bg-white")}
+          >
             <a href="#contact" onClick={() => track("cta_click", { source: "header" })}>
               Agendar cita
             </a>
@@ -89,39 +95,36 @@ export default function Header() {
 
         <Dialog.Root open={open} onOpenChange={setOpen}>
           <Dialog.Trigger asChild>
-            <button className="-mr-2 p-2 text-text lg:hidden" aria-label="Abrir menú">
-              <Menu size={26} />
+            <button
+              className={cn("-mr-2 p-2 xl:hidden", !scrolled ? "text-text lg:text-background" : "text-text")}
+              aria-label="Abrir menú"
+            >
+              <Menu size={28} />
             </button>
           </Dialog.Trigger>
           <Dialog.Portal>
-            <Dialog.Overlay className="fixed inset-0 z-50 bg-black/40" />
-            <Dialog.Content className="fixed inset-y-0 right-0 z-50 w-[85%] max-w-sm bg-background p-6 shadow-xl">
+            <Dialog.Overlay className="fixed inset-0 z-50 bg-black/40 data-[state=open]:animate-in data-[state=open]:fade-in-0" />
+            <Dialog.Content className="fixed inset-y-0 right-0 z-50 flex w-full max-w-md flex-col bg-primary p-8 text-background data-[state=open]:animate-in data-[state=open]:slide-in-from-right">
               <Dialog.Title className="sr-only">Menú</Dialog.Title>
               <Dialog.Description className="sr-only">Navegación del sitio</Dialog.Description>
-              <div className="mb-8 flex items-center justify-between">
-                <Image src={logo} alt="Fisiogad" className="h-12 w-auto" />
+              <div className="flex justify-end">
                 <Dialog.Close asChild>
-                  <button className="p-2" aria-label="Cerrar menú">
-                    <X size={24} />
+                  <button className="-mr-2 p-2" aria-label="Cerrar menú">
+                    <X size={28} />
                   </button>
                 </Dialog.Close>
               </div>
-              <nav aria-label="Móvil" className="flex flex-col gap-5">
-                {NAV.map((item) => (
+              <nav aria-label="Móvil" className="mt-10 flex flex-1 flex-col gap-2">
+                {[...NAV, { name: "Agendar cita", href: "#contact" }].map((item) => (
                   <a
                     key={item.name}
                     href={item.href}
                     onClick={() => setOpen(false)}
-                    className="text-lg font-medium text-text hover:text-primary"
+                    className="border-b border-background/20 py-4 font-display text-3xl font-semibold tracking-tight transition-transform duration-300 hover:translate-x-2"
                   >
                     {item.name}
                   </a>
                 ))}
-                <Button asChild className="mt-2 w-full">
-                  <a href="#contact" onClick={() => setOpen(false)}>
-                    Agendar cita
-                  </a>
-                </Button>
               </nav>
             </Dialog.Content>
           </Dialog.Portal>

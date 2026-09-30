@@ -1,67 +1,57 @@
 "use client"
-import { motion } from "framer-motion"
 import { ArrowRight } from "lucide-react"
+import { BodyFigure } from "@/components/features/body-figure"
+import { Magnetic } from "@/components/motion/magnetic"
+import { Reveal, SplitHeading } from "@/components/motion/reveal"
 import { Button } from "@/components/ui/button"
-import { BodyMap } from "@/components/features/body-map"
-import { NumberTicker } from "@/components/magicui/number-ticker"
-
-const STATS = [
-  { value: 5, suffix: "+", label: "Años de experiencia" },
-  { value: 100, suffix: "+", label: "Pacientes satisfechos" },
-  { value: 15, suffix: "+", label: "Tipos de tratamientos" },
-  { value: 30, suffix: "", label: "Certificaciones" },
-]
+import { SITE } from "@/lib/site"
+import { track } from "@/lib/analytics"
 
 export default function HeroSection() {
   return (
-    <section id="hero" className="relative overflow-hidden bg-background-alt pb-16 pt-32 md:pb-24 md:pt-40">
-      <div aria-hidden className="bg-grid-brand pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_at_top_right,black,transparent_70%)]" />
-      <div className="container relative">
-        <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.15fr] lg:gap-12">
-          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <h1 className="text-4xl text-text md:text-5xl lg:text-[3.4rem] lg:leading-[1.08]">Fisioterapia profesional para lesiones deportivas y dolor diario</h1>
-            <p className="mt-6 max-w-lg text-lg text-text-light md:text-xl">
-              Tratamientos personalizados con equipo profesional y cuidado continuo. Dinos dónde te duele y agenda en
-              un minuto.
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button asChild size="lg">
-                <a href="#contact">Agendar una sesión</a>
-              </Button>
-              <Button asChild size="lg" variant="outline">
-                <a href="#services">
-                  Explorar servicios
-                  <ArrowRight />
-                </a>
-              </Button>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.15 }}
-            className="rounded-2xl bg-background/80 p-4 shadow-lg ring-1 ring-border backdrop-blur sm:p-6"
-          >
-            <h2 className="mb-5 text-2xl font-bold text-text md:text-3xl">¿Dónde te duele?</h2>
-            <BodyMap />
-          </motion.div>
-        </div>
-
-        <dl className="mt-16 grid grid-cols-2 gap-8 border-t border-border pt-10 md:mt-20 md:grid-cols-4">
-          {STATS.map((s) => (
-            <div key={s.label}>
-              <dt className="sr-only">{s.label}</dt>
-              <dd className="text-4xl font-bold text-primary md:text-5xl font-display">
-                <NumberTicker value={s.value} suffix={s.suffix} />
-              </dd>
-              <p aria-hidden className="mt-1 text-text-light">
-                {s.label}
+    <section id="hero" className="relative lg:min-h-[100svh]">
+      <div className="container relative z-10 pointer-events-none lg:absolute lg:inset-0 lg:mx-auto">
+        <div className="pointer-events-none flex h-full flex-col justify-center pb-16 pt-36 lg:w-[58%] lg:pb-14 lg:pt-32">
+          <div className="pointer-events-auto">
+            <SplitHeading as="h1" text="Fisioterapia profesional" onLoad delay={0.15} className="max-w-[10ch]" />
+            <Reveal onLoad delay={0.7} className="mt-8 max-w-md">
+              <p className="text-xl text-text-light">
+                Para lesiones deportivas y dolor del día a día. Toca la zona que te duele y agenda en un minuto.
               </p>
-            </div>
-          ))}
-        </dl>
+            </Reveal>
+            <Reveal onLoad delay={0.85} className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+              <Magnetic>
+                <Button asChild size="lg">
+                  <a href="#contact" onClick={() => track("cta_click", { source: "hero" })}>
+                    Agendar una sesión
+                    <ArrowRight className="arrow" />
+                  </a>
+                </Button>
+              </Magnetic>
+              <a href="#services" className="link-line text-lg text-text">
+                Ver servicios
+              </a>
+            </Reveal>
+          </div>
+
+          <Reveal onLoad delay={1.1} className="pointer-events-auto mt-16 hidden border-t border-border pt-5 text-sm text-text-light lg:block lg:mt-auto">
+            <p>
+              {SITE.address.colony}, {SITE.address.city}
+              <span className="mx-3 text-border">/</span>
+              Lun a Vie 9:00 a 18:00
+              <span className="mx-3 text-border">/</span>
+              Sáb 9:00 a 14:00
+            </p>
+          </Reveal>
+        </div>
       </div>
+      {/* Panel de marca a sangre: solo escritorio; en móvil va debajo del titular */}
+      <div className="relative z-0 bg-primary px-4 py-16 lg:absolute lg:inset-y-0 lg:right-0 lg:w-[38%] lg:pb-12 lg:pl-12 lg:pr-[max(1rem,calc((100vw-80rem)/2+1rem))] lg:pt-32 xl:pl-16">
+        <div className="mx-auto h-[38rem] max-w-md lg:h-full lg:max-w-none">
+          <BodyFigure />
+        </div>
+      </div>
+
     </section>
   )
 }

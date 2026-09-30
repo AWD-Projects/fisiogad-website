@@ -1,6 +1,7 @@
 "use client"
 import { createContext, useCallback, useContext, useMemo, useState } from "react"
 import type { ZoneId } from "@/data/zones"
+import { scrollToId } from "@/lib/scroll"
 
 interface BookingState {
   zone: ZoneId | null
@@ -20,7 +21,7 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
   const goToBooking = useCallback((opts?: { zone?: ZoneId | null; service?: string }) => {
     if (opts?.zone !== undefined) setZone(opts.zone)
     if (opts?.service !== undefined) setService(opts.service)
-    document.getElementById("contact")?.scrollIntoView({ behavior: "smooth", block: "start" })
+    scrollToId("contact")
   }, [])
 
   const value = useMemo(

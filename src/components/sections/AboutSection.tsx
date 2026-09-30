@@ -1,94 +1,110 @@
+"use client"
+import { useRef } from "react"
 import Image from "next/image"
-import { Award, Clock, MapPin, Shield, Star } from "lucide-react"
-import mainlogo from "@/assets/mainlogo.svg"
-import hero from "@/assets/hero.jpg"
+import { motion, useScroll, useTransform } from "framer-motion"
+import { ArrowUpRight } from "lucide-react"
+import photo from "@/assets/services/follow.jpg"
+import { SectionShell } from "./section-shell"
+import { Reveal } from "@/components/motion/reveal"
+import { NumberTicker } from "@/components/magicui/number-ticker"
 import { SITE } from "@/lib/site"
 
 const FEATURES = [
   {
-    icon: Shield,
     title: "Equipo profesional",
-    description:
-      "Llevamos equipos de fisioterapia de nivel hospitalario directamente a tu puerta para los tratamientos más efectivos.",
+    text: "Llevamos equipos de fisioterapia de nivel hospitalario directamente a tu puerta para los tratamientos más efectivos.",
   },
   {
-    icon: Award,
     title: "Terapeutas certificados",
-    description:
-      "Nuestro equipo consta de profesionales licenciados con amplia formación y años de experiencia práctica.",
+    text: "Profesionales licenciados con amplia formación y años de experiencia práctica.",
   },
   {
-    icon: Clock,
     title: "Horarios flexibles",
-    description: "Programa citas en horarios que funcionen para ti, incluyendo tardes y fines de semana.",
+    text: "Programa citas en horarios que funcionen para ti, incluyendo tardes y fines de semana.",
   },
   {
-    icon: Star,
     title: "Enfoque personalizado",
-    description:
-      "Cada plan de tratamiento está adaptado a tus necesidades específicas, condición y objetivos de recuperación.",
+    text: "Cada plan está adaptado a tus necesidades específicas, condición y objetivos de recuperación.",
   },
 ]
 
+const NUMBERS = [
+  { value: 5, suffix: "+", label: "años de experiencia" },
+  { value: 100, suffix: "+", label: "pacientes satisfechos" },
+  { value: 30, suffix: "", label: "certificaciones" },
+]
+
 export default function AboutSection() {
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] })
+  const imgY = useTransform(scrollYProgress, [0, 1], ["-9%", "9%"])
+  const clip = useTransform(scrollYProgress, [0, 0.35], ["inset(12% 12% 12% 12%)", "inset(0% 0% 0% 0%)"])
+
   return (
-    <section id="about" className="section-y bg-background-alt">
-      <div className="container">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
-          <div className="relative">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-2xl">
-              <Image
-                src={hero}
-                alt="Fisioterapeuta atendiendo a un paciente"
-                fill
-                sizes="(min-width: 1024px) 45vw, 100vw"
-                className="object-cover"
-                placeholder="blur"
-              />
-            </div>
-            <a
-              href={SITE.mapsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="absolute -bottom-6 left-4 right-4 flex items-start gap-3 rounded-xl bg-white p-4 shadow-lg ring-1 ring-border transition-shadow hover:shadow-xl sm:left-auto sm:max-w-xs"
-            >
-              <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden />
-              <span className="text-sm text-text">
-                <span className="block font-semibold">Consultorio en Colonia Del Valle</span>
-                {SITE.address.street}, Benito Juárez. Ver en Google Maps
-              </span>
-            </a>
-          </div>
+    <SectionShell id="about" title="Sobre Fisiogad">
+      <Reveal>
+        <p className="font-display text-2xl font-medium leading-snug tracking-tight text-text md:text-[2rem]">
+          En {SITE.legalName}, ubicada en Colonia del Valle, mejoramos tu salud y calidad de vida con tratamientos
+          personalizados de fisioterapia y rehabilitación física.
+        </p>
+        <p className="mt-6 max-w-xl text-lg text-text-light">
+          Atendemos lesiones deportivas, problemas de columna y procesos posoperatorios. Nuestro equipo te acompaña en
+          cada paso de tu recuperación con atención cercana y enfocada en tus necesidades.
+        </p>
+      </Reveal>
 
-          <div>
-            <Image src={mainlogo} alt="Fisiogad" className="mb-6 h-14 w-auto" />
-            <h2 className="text-text">Sobre Fisiogad</h2>
-            <p className="mt-5 text-lg text-text-light">
-              En {SITE.legalName}, ubicada en Colonia del Valle, mejoramos tu salud y calidad de vida con tratamientos
-              personalizados de fisioterapia y rehabilitación física. Atendemos lesiones deportivas, problemas de
-              columna y procesos posoperatorios.
-            </p>
-            <p className="mt-4 text-lg text-text-light">
-              Nuestro equipo profesional te acompaña en cada paso de tu recuperación con atención cercana y enfocada en
-              tus necesidades. Tu bienestar es nuestra prioridad.
-            </p>
-
-            <ul className="mt-10 grid gap-x-8 gap-y-7 sm:grid-cols-2">
-              {FEATURES.map(({ icon: Icon, title, description }) => (
-                <li key={title} className="flex gap-4">
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/10">
-                    <Icon className="h-5 w-5 text-primary" aria-hidden />
-                  </span>
-                  <div>
-                    <h3 className="text-lg font-semibold text-text md:text-lg">{title}</h3>
-                    <p className="mt-1 text-sm text-text-light">{description}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+      <div ref={ref} className="mt-16">
+        <motion.div style={{ clipPath: clip }} className="relative aspect-[16/10] overflow-hidden bg-muted">
+          <motion.div style={{ y: imgY }} className="absolute -inset-y-[12%] inset-x-0">
+            <Image
+              src={photo}
+              alt="Vendaje neuromuscular en rodilla durante una sesión de fisioterapia"
+              fill
+              sizes="(min-width: 1024px) 60vw, 100vw"
+              placeholder="blur"
+              className="object-cover object-center grayscale contrast-125"
+            />
+          </motion.div>
+          {/* Tinte de marca sobre la foto para unificar cualquier imagen */}
+          <div aria-hidden className="absolute inset-0 bg-primary/30 mix-blend-multiply" />
+        </motion.div>
+        <a
+          href={SITE.mapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group mt-4 inline-flex items-center gap-2 text-text-light hover:text-primary"
+        >
+          <span className="link-line">
+            {SITE.address.street}, {SITE.address.colony}
+          </span>
+          <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+        </a>
       </div>
-    </section>
+
+      <dl className="mt-20 border-t border-border">
+        {FEATURES.map((f) => (
+          <Reveal key={f.title} y={16}>
+            <div className="grid gap-2 border-b border-border py-6 md:grid-cols-[1fr_1.6fr] md:gap-8">
+              <dt className="font-display text-xl font-semibold tracking-tight text-text">{f.title}</dt>
+              <dd className="text-text-light">{f.text}</dd>
+            </div>
+          </Reveal>
+        ))}
+      </dl>
+
+      <dl className="mt-20 grid grid-cols-3 gap-6">
+        {NUMBERS.map((n) => (
+          <div key={n.label}>
+            <dt className="sr-only">{n.label}</dt>
+            <dd className="font-display text-4xl font-semibold tracking-tight text-primary md:text-6xl">
+              <NumberTicker value={n.value} suffix={n.suffix} />
+            </dd>
+            <p aria-hidden className="mt-2 text-sm text-text-light md:text-base">
+              {n.label}
+            </p>
+          </div>
+        ))}
+      </dl>
+    </SectionShell>
   )
 }

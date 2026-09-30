@@ -72,20 +72,20 @@ export type Side = "front" | "back"
 // Posiciones en un lienzo de 200 x 440. `mirror` duplica el punto del otro lado del cuerpo.
 export const HOTSPOTS: Record<Side, { zone: ZoneId; x: number; y: number; mirror?: boolean }[]> = {
   front: [
-    { zone: "cuello", x: 100, y: 72 },
-    { zone: "hombro", x: 60, y: 96, mirror: true },
-    { zone: "codo", x: 42, y: 152, mirror: true },
-    { zone: "muneca", x: 33, y: 214, mirror: true },
+    { zone: "cuello", x: 100, y: 58 },
+    { zone: "hombro", x: 60, y: 82, mirror: true },
+    { zone: "codo", x: 49, y: 152, mirror: true },
+    { zone: "muneca", x: 34, y: 226, mirror: true },
     { zone: "muslo", x: 79, y: 262, mirror: true },
-    { zone: "rodilla", x: 78, y: 325, mirror: true },
-    { zone: "tobillo", x: 76, y: 398, mirror: true },
+    { zone: "rodilla", x: 79, y: 332, mirror: true },
+    { zone: "tobillo", x: 77, y: 410, mirror: true },
   ],
   back: [
-    { zone: "cuello", x: 100, y: 72 },
-    { zone: "hombro", x: 60, y: 96, mirror: true },
+    { zone: "cuello", x: 100, y: 58 },
+    { zone: "hombro", x: 60, y: 82, mirror: true },
     { zone: "espalda-baja", x: 100, y: 176 },
     { zone: "muslo", x: 79, y: 262, mirror: true },
-    { zone: "rodilla", x: 78, y: 325, mirror: true },
-    { zone: "tobillo", x: 76, y: 398, mirror: true },
+    { zone: "rodilla", x: 79, y: 332, mirror: true },
+    { zone: "tobillo", x: 77, y: 410, mirror: true },
   ],
 }

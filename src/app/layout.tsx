@@ -5,6 +5,8 @@ import "./globals.css"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
 import MobileCtaBar from "@/components/MobileCtaBar"
+import { SmoothScroll } from "@/components/motion/smooth-scroll"
+import { ScrollProgress } from "@/components/motion/scroll-progress"
 import { BookingProvider } from "@/lib/booking-context"
 import { FAQ } from "@/data/faq"
 import { SITE } from "@/lib/site"
@@ -101,6 +103,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="font-sans antialiased">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <BookingProvider>
+          <SmoothScroll />
+          <ScrollProgress />
           <Header />
           <main>{children}</main>
           <Footer />

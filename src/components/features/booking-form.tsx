@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { addDays, format, startOfDay } from "date-fns"
 import { es } from "date-fns/locale"
-import { Send, X } from "lucide-react"
+import { ArrowRight, Check, X } from "lucide-react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
@@ -41,6 +41,7 @@ export function BookingForm() {
   const [phone, setPhone] = useState("")
   const [message, setMessage] = useState("")
   const [errors, setErrors] = useState<Errors>({})
+  const [sent, setSent] = useState(false)
 
   useEffect(() => setMounted(true), [])
 
@@ -78,15 +79,17 @@ export function BookingForm() {
 
     track("booking_submit", { service, zone: zone ?? "", weekday: date!.getDay() })
     window.open(whatsappLink(lines.join("\n")), "_blank", "noopener,noreferrer")
+    setSent(true)
+    setTimeout(() => setSent(false), 5000)
     toast.success("Abrimos WhatsApp con tu solicitud", {
       description: "Envía el mensaje para que te confirmemos tu cita.",
     })
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate className="space-y-8 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-border sm:p-8">
-      <fieldset className="space-y-3">
-        <legend className="text-xl font-bold text-text font-display">¿Qué necesitas?</legend>
+    <form onSubmit={onSubmit} noValidate className="space-y-12 bg-background p-6 text-text sm:p-10">
+      <fieldset className="space-y-5">
+        <legend className="text-2xl font-semibold tracking-tight text-text font-display">¿Qué necesitas?</legend>
         <div className="space-y-2">
           <Label htmlFor="service">Servicio</Label>
           <Select value={service} onValueChange={setService}>
@@ -107,7 +110,7 @@ export function BookingForm() {
           <button
             type="button"
             onClick={() => setZone(null)}
-            className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary hover:bg-primary/15"
+            className="group inline-flex items-center gap-2 border border-primary/30 px-3 py-1.5 text-sm font-medium text-primary transition-colors hover:bg-primary hover:text-background"
           >
             Zona: {ZONES[zone].label}
             <X className="h-4 w-4" aria-hidden />
@@ -116,9 +119,9 @@ export function BookingForm() {
         )}
       </fieldset>
 
-      <fieldset className="space-y-3">
-        <legend className="text-xl font-bold text-text font-display">¿Cuándo te queda bien?</legend>
-        <div className="grid gap-6 md:grid-cols-[auto_1fr]">
+      <fieldset className="space-y-5">
+        <legend className="text-2xl font-semibold tracking-tight text-text font-display">¿Cuándo te queda bien?</legend>
+        <div className="grid gap-8 md:grid-cols-[auto_1fr] md:gap-12">
           <div className="min-h-[21rem] md:w-[19.5rem]">
             {mounted ? (
               <Calendar
@@ -151,10 +154,10 @@ export function BookingForm() {
                     aria-checked={time === s}
                     onClick={() => setTime(s)}
                     className={cn(
-                      "h-11 rounded-md border text-base font-medium transition-colors",
+                      "h-11 border text-base font-medium tabular-nums transition-all duration-200 active:scale-95",
                       time === s
                         ? "border-primary bg-primary text-background"
-                        : "border-input bg-white text-text hover:border-primary hover:text-primary"
+                        : "border-border bg-transparent text-text hover:border-primary hover:text-primary"
                     )}
                   >
                     {s}
@@ -171,7 +174,7 @@ export function BookingForm() {
       </fieldset>
 
       <fieldset className="space-y-4">
-        <legend className="text-xl font-bold text-text font-display">Tus datos</legend>
+        <legend className="text-2xl font-semibold tracking-tight text-text font-display">Tus datos</legend>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
             <Label htmlFor="name">Nombre completo</Label>
@@ -191,8 +194,17 @@ export function BookingForm() {
       </fieldset>
 
       <Button type="submit" size="lg" className="w-full">
-        <Send />
-        Agendar por WhatsApp
+        {sent ? (
+          <>
+            <Check />
+            Solicitud lista en WhatsApp
+          </>
+        ) : (
+          <>
+            Agendar por WhatsApp
+            <ArrowRight className="arrow" />
+          </>
+        )}
       </Button>
     </form>
   )

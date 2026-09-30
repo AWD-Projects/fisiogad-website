@@ -45,19 +45,36 @@ export function BodyFigure() {
 
   return (
     <div className="flex h-full min-h-0 flex-col text-background">
-      <div className="flex items-baseline justify-between gap-4">
+      <div className="flex flex-col items-center text-center">
         <h2 className="!text-[1.75rem] md:!text-[2rem] !leading-none text-background">¿Dónde te duele?</h2>
-        <button
-          type="button"
-          onClick={() => setSide((s) => (s === "front" ? "back" : "front"))}
-          className="link-line py-1 text-sm text-background/80 hover:text-background"
-        >
-          {side === "front" ? "Ver espalda" : "Ver frente"}
-        </button>
+        <div role="group" aria-label="Vista del cuerpo" className="relative mt-5 inline-flex rounded-full border border-background/40 p-1">
+          {(["front", "back"] as const).map((v) => (
+            <button
+              key={v}
+              type="button"
+              onClick={() => setSide(v)}
+              aria-pressed={side === v}
+              className={cn(
+                "relative z-10 min-w-[6.5rem] rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300",
+                side === v ? "text-primary" : "text-background/85 hover:text-background"
+              )}
+            >
+              {side === v && (
+                <motion.span
+                  layoutId="body-side"
+                  aria-hidden
+                  className="absolute inset-0 -z-10 rounded-full bg-background"
+                  transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                />
+              )}
+              {v === "front" ? "Frente" : "Espalda"}
+            </button>
+          ))}
+        </div>
       </div>
 
-      <div className="relative my-6 flex min-h-0 flex-1 items-center justify-center">
-        <div className="relative aspect-[200/440] h-full max-h-[34rem] min-h-[22rem]">
+      <div className="relative my-8 lg:my-6 flex items-center lg:min-h-0 lg:flex-1 justify-center">
+        <div className="relative aspect-[200/440] h-[24rem] sm:h-[28rem] lg:h-full lg:max-h-[34rem] lg:min-h-[22rem]">
           <svg viewBox="0 0 200 440" className="absolute inset-0 h-full w-full" fill="none" aria-hidden focusable="false">
             <g stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" opacity="0.9">
               <motion.circle cx="100" cy="32" r="20" {...draw(0)} />
@@ -123,7 +140,7 @@ export function BodyFigure() {
         </div>
       </div>
 
-      <div className="min-h-[9.5rem]" aria-live="polite">
+      <div className="mt-2 min-h-[6rem] lg:min-h-[11rem] text-center" aria-live="polite">
         <AnimatePresence mode="wait">
           {selected ? (
             <motion.div
@@ -134,10 +151,10 @@ export function BodyFigure() {
               transition={{ duration: 0.3, ease: EASE }}
             >
               <p className="font-display text-2xl font-semibold tracking-tight">{selected.label}</p>
-              <p className="mt-1 max-w-sm text-background/80">
+              <p className="mx-auto mt-2 max-w-sm text-background/85">
                 {selected.treats.join(" · ")}
               </p>
-              <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-3">
+              <div className="mt-5 flex flex-col items-center gap-x-6 gap-y-3 sm:flex-row sm:justify-center">
                 <Button variant="onDark" size="sm" onClick={() => goToBooking({ zone: selected.id, service: selected.serviceValue })}>
                   Agendar por {selected.label.toLowerCase()}
                   <ArrowRight className="arrow" />
@@ -155,7 +172,7 @@ export function BodyFigure() {
               <span className="sr-only">Servicio sugerido: {serviceLabel(selected.serviceValue)}</span>
             </motion.div>
           ) : (
-            <motion.p key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="max-w-xs text-background/80">
+            <motion.p key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mx-auto max-w-xs text-background/85">
               Toca un punto del cuerpo. Te mostramos qué tratamos ahí y armamos tu cita con esa información.
             </motion.p>
           )}

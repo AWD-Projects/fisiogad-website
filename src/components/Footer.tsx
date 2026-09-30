@@ -43,7 +43,7 @@ export default function Footer() {
           <p>
             Desarrollado por{" "}
             <a href="https://www.amoxtli.tech" target="_blank" rel="noopener noreferrer" className="link-line hover:text-background">
-              Amoxtli Web Developers
+              AMOXTLI<sup className="ml-0.5 text-[0.6em] no-underline">™</sup>
             </a>
           </p>
         </div>

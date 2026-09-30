@@ -83,7 +83,7 @@
 
   /* Los espaciados de sección se definen aquí para evitar conflictos de especificidad */
   .section-y {
-    @apply py-24 md:py-40;
+    @apply py-16 sm:py-24 md:py-40;
   }
 
   /* Subrayado que se dibuja al pasar el cursor */

@@ -46,7 +46,7 @@ export default function HeroSection() {
         </div>
       </div>
       {/* Panel de marca a sangre: solo escritorio; en móvil va debajo del titular */}
-      <div className="relative z-0 bg-primary px-4 py-16 lg:absolute lg:inset-y-0 lg:right-0 lg:w-[38%] lg:pb-12 lg:pl-12 lg:pr-[max(1rem,calc((100vw-80rem)/2+1rem))] lg:pt-32 xl:pl-16">
+      <div className="relative z-0 bg-primary px-4 py-16 lg:absolute lg:inset-y-0 lg:right-0 lg:w-[38%] lg:px-12 lg:pb-12 lg:pt-28">
         <div className="mx-auto h-[38rem] max-w-md lg:h-full lg:max-w-none">
           <BodyFigure />
         </div>

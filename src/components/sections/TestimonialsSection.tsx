@@ -66,7 +66,7 @@ export default function TestimonialsSection() {
         onFocus={() => setPaused(true)}
         onBlur={() => setPaused(false)}
       >
-        <div className="min-h-[24rem] md:min-h-[26rem]" aria-live="polite">
+        <div className="min-h-[20rem] sm:min-h-[22rem] md:min-h-[26rem]" aria-live="polite">
           <AnimatePresence mode="wait">
             <motion.figure
               key={i}

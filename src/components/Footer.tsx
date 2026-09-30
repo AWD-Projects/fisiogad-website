@@ -1,153 +1,88 @@
-"use client";
+import { Instagram, Mail, MapPin, Phone } from "lucide-react"
+import Image from "next/image"
+import logo from "@/assets/logo.svg"
+import { SITE } from "@/lib/site"
 
-import Link from "next/link";
-import {
-    Facebook,
-    Instagram,
-    Twitter,
-    MapPin,
-    Phone,
-    Mail,
-} from "lucide-react";
-import * as Separator from "@radix-ui/react-separator";
+const LINKS = [
+  { name: "Inicio", href: "#hero" },
+  { name: "Servicios", href: "#services" },
+  { name: "Nosotros", href: "#about" },
+  { name: "Testimonios", href: "#testimonials" },
+  { name: "Preguntas frecuentes", href: "#faq" },
+  { name: "Contacto", href: "#contact" },
+]
 
-const Footer = () => {
-    const currentYear = new Date().getFullYear();
+export default function Footer() {
+  const year = new Date().getFullYear()
+  return (
+    <footer className="bg-primary text-background">
+      <div className="container grid gap-10 py-14 md:grid-cols-3 md:py-16">
+        <div>
+          <Image src={logo} alt="Fisiogad" className="h-14 w-auto brightness-0 invert" />
+          <p className="mt-4 max-w-xs text-background/80">
+            Servicios profesionales de fisioterapia con tratamientos personalizados para todas las partes del cuerpo y
+            condiciones.
+          </p>
+          <a
+            href={SITE.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram de Fisiogad"
+            className="mt-5 inline-flex h-11 w-11 items-center justify-center rounded-full bg-background/10 transition-colors hover:bg-background/20"
+          >
+            <Instagram className="h-5 w-5" />
+          </a>
+        </div>
 
-    return (
-        <footer className="bg-background-alt text-text pt-16 pb-8">
-            <div className="container">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-                    {/* Company Info */}
-                    <div>
-                        <h3 className="text-xl font-bold mb-4 font-display">
-                            Fisiogad
-                        </h3>
-                        <p className="mb-4 text-text-light">
-                            Servicios profesionales de fisioterapia que vienen a
-                            ti. Tratamientos personalizados para todas las
-                            partes del cuerpo y condiciones.
-                        </p>
-                        <div className="flex space-x-4 text-primary">
-                            <Link
-                                href="#"
-                                className="text-text-light hover:text-primary transition-colors duration-200"
-                            >
-                                <Facebook size={20} />
-                            </Link>
-                            <Link
-                                href="https://www.instagram.com/fisio.gad?utm_source=ig_web_button_share_sheet&igsh=MTF0cWdiYjZ5Z2drdA=="
-                                className="text-text-light hover:text-primary transition-colors duration-200"
-                            >
-                                <Instagram size={20} />
-                            </Link>
-                            <Link
-                                href="#"
-                                className="text-text-light hover:text-primary transition-colors duration-200"
-                            >
-                                <Twitter size={20} />
-                            </Link>
-                        </div>
-                    </div>
+        <nav aria-label="Enlaces rápidos">
+          <h3 className="text-lg font-semibold md:text-lg">Enlaces rápidos</h3>
+          <ul className="mt-4 space-y-2.5">
+            {LINKS.map((l) => (
+              <li key={l.name}>
+                <a href={l.href} className="text-background/80 transition-colors hover:text-background">
+                  {l.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
 
-                    {/* Quick Links */}
-                    <div>
-                        <h3 className="text-xl font-bold mb-4 font-display">
-                            Enlaces Rápidos
-                        </h3>
-                        <nav className="flex flex-col space-y-2">
-                            <Link
-                                href="#hero"
-                                className="text-text-light hover:text-primary transition-colors duration-200"
-                            >
-                                Inicio
-                            </Link>
-                            <Link
-                                href="#services"
-                                className="text-text-light hover:text-primary transition-colors duration-200"
-                            >
-                                Servicios
-                            </Link>
-                            <Link
-                                href="#about"
-                                className="text-text-light hover:text-primary transition-colors duration-200"
-                            >
-                                Nosotros
-                            </Link>
-                            <Link
-                                href="#testimonials"
-                                className="text-text-light hover:text-primary transition-colors duration-200"
-                            >
-                                Testimonios
-                            </Link>
-                            <Link
-                                href="#contact"
-                                className="text-text-light hover:text-primary transition-colors duration-200"
-                            >
-                                Contacto
-                            </Link>
-                        </nav>
-                    </div>
-
-                    {/* Contact Info */}
-                    <div>
-                        <h3 className="text-xl font-bold mb-4 font-display">
-                            Contáctanos
-                        </h3>
-                        <div className="flex flex-col space-y-3">
-                            <div className="flex items-start">
-                                <MapPin
-                                    size={20}
-                                    className="text-primary mt-1 mr-3 flex-shrink-0"
-                                />
-                                <span className="text-text-light">
-                                    Félix Cuevas 301, Consultorio- 104, Colonia Del Valle, Benito Juárez, 03104 Ciudad de México, CDMX
-                                </span>
-                            </div>
-                            <div className="flex items-center">
-                                <Phone
-                                    size={20}
-                                    className="text-primary mr-3 flex-shrink-0"
-                                />
-                                <span className="text-text-light">
-                                    +52 55 4959 1491
-                                </span>
-                            </div>
-                            <div className="flex items-center">
-                                <Mail
-                                    size={20}
-                                    className="text-primary mr-3 flex-shrink-0"
-                                />
-                                <span className="text-text-light">
-                                    Terapia.gad@gmail.com
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <Separator.Root className="h-px bg-gray-200 my-8" />
-
-                <div className="flex justify-between items-center text-text-light text-sm">
-                    <p>
-                        &copy; {currentYear} Fisiogad. Todos los derechos
-                        reservados.
-                    </p>
-                    <span>
-                        Desarrollado por{" "}
-                        <a
-                            href="https://www.amoxtli.tech"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-primary hover:underline"
-                        >
-                            Amoxtli Web Developers
-                        </a>
-                    </span>
-                </div>
-            </div>
-        </footer>
-    );
-};
-
-export default Footer;
+        <div>
+          <h3 className="text-lg font-semibold md:text-lg">Contáctanos</h3>
+          <ul className="mt-4 space-y-3 text-background/80">
+            <li className="flex gap-3">
+              <MapPin className="mt-0.5 h-5 w-5 shrink-0" aria-hidden />
+              <a href={SITE.mapsUrl} target="_blank" rel="noopener noreferrer" className="hover:text-background">
+                {SITE.address.street}, {SITE.address.colony}, {SITE.address.borough}, {SITE.address.postalCode}{" "}
+                {SITE.address.city}
+              </a>
+            </li>
+            <li className="flex gap-3">
+              <Phone className="h-5 w-5 shrink-0" aria-hidden />
+              <a href={`tel:${SITE.phoneTel}`} className="hover:text-background">
+                {SITE.phoneDisplay}
+              </a>
+            </li>
+            <li className="flex gap-3">
+              <Mail className="h-5 w-5 shrink-0" aria-hidden />
+              <a href={`mailto:${SITE.email}`} className="hover:text-background">
+                {SITE.email}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div className="border-t border-background/15">
+        <div className="container flex flex-col gap-2 py-5 text-sm text-background/75 sm:flex-row sm:justify-between">
+          <p>© {year} Fisiogad. Todos los derechos reservados.</p>
+          <p>
+            Desarrollado por{" "}
+            <a href="https://www.amoxtli.tech" target="_blank" rel="noopener noreferrer" className="underline hover:text-background">
+              Amoxtli Web Developers
+            </a>
+          </p>
+        </div>
+      </div>
+    </footer>
+  )
+}

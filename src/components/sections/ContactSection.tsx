@@ -1,221 +1,91 @@
-"use client"
+import { Clock, Instagram, Mail, MapPin, Phone } from "lucide-react"
+import { BookingForm } from "@/components/features/booking-form"
+import { Button } from "@/components/ui/button"
+import { SITE, whatsappLink } from "@/lib/site"
 
-import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
-import * as Form from '@radix-ui/react-form'
-import { MapPin, Phone, Mail, Calendar, Clock, Send } from 'lucide-react'
+const address = `${SITE.address.street}, ${SITE.address.colony}, ${SITE.address.borough}, ${SITE.address.postalCode} ${SITE.address.city}, ${SITE.address.region}`
 
-const ContactSection = () => {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, amount: 0.2 })
-  
-  const contactInfo = [
-    {
-      icon: <Phone className="h-6 w-6 text-primary" />,
-      title: 'Teléfono',
-      value: '+52 55 4959 1491',
-      link: 'tel:+15551234567'
-    },
-    {
-      icon: <Mail className="h-6 w-6 text-primary" />,
-      title: 'Correo',
-      value: 'Terapia.gad@gmail.com',
-      link: 'mailto:Terapia.gad@gmail.com'
-    },
-    {
-      icon: <MapPin className="h-6 w-6 text-primary" />,
-      title: 'Dirección',
-      value: 'Félix Cuevas 301, Consultorio- 104, Colonia Del Valle, Benito Juárez, 03104 Ciudad de México, CDMX',
-      link: 'https://maps.app.goo.gl/1eUdE5NmNViAsbG6A'
-    },
-    {
-      icon: <Clock className="h-6 w-6 text-primary" />,
-      title: 'Horario de Atención',
-      value: 'Lun-Vie: 9am - 6pm, Sáb: 9am - 2pm',
-      link: '#'
-    }
-  ]
-  
+const INFO = [
+  { icon: Phone, title: "Teléfono", value: SITE.phoneDisplay, href: `tel:${SITE.phoneTel}` },
+  { icon: Mail, title: "Correo", value: SITE.email, href: `mailto:${SITE.email}` },
+  { icon: MapPin, title: "Dirección", value: address, href: SITE.mapsUrl },
+  { icon: Instagram, title: "Instagram", value: "@fisio.gad", href: SITE.instagram },
+] as const
+
+export default function ContactSection() {
   return (
-    <section id="contact" className="py-20 md:py-32 bg-primary bg-opacity-5">
+    <section id="contact" className="section-y bg-primary/[0.04]">
       <div className="container">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="text-center max-w-3xl mx-auto mb-16"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Agenda tu <span className="text-primary">Sesión</span>
-          </h2>
-          <p className="text-text-light text-lg">
-            ¿Listo para comenzar tu camino hacia la recuperación? Agenda una sesión o consulta
-            con nuestro equipo de fisioterapeutas profesionales hoy mismo.
+        <div className="max-w-2xl">
+          <h2 className="text-text">Agenda tu sesión</h2>
+          <p className="mt-5 text-lg text-text-light">
+            Elige servicio, día y horario. Armamos tu solicitud y la mandamos por WhatsApp para confirmarla contigo.
           </p>
-        </motion.div>
-        
-        <div ref={ref} className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          {/* Contact Form */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="bg-background p-8 rounded-lg shadow-md"
-          >
-            <h3 className="text-2xl font-bold mb-6">Envíanos un Mensaje</h3>
-            
-            <Form.Root className="space-y-4">
-              <Form.Field name="name">
-                <div className="flex items-baseline justify-between mb-2">
-                  <Form.Label className="text-sm font-medium">
-                    Nombre Completo
-                  </Form.Label>
-                  <Form.Message className="text-sm text-red-500" match="valueMissing">
-                    Por favor ingresa tu nombre
-                  </Form.Message>
-                </div>
-                <Form.Control asChild>
-                  <input
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                    type="text"
-                    required
-                    placeholder="Juan Pérez"
-                  />
-                </Form.Control>
-              </Form.Field>
-              
-              <Form.Field name="email">
-                <div className="flex items-baseline justify-between mb-2">
-                  <Form.Label className="text-sm font-medium">
-                    Correo Electrónico
-                  </Form.Label>
-                  <Form.Message className="text-sm text-red-500" match="valueMissing">
-                    Por favor ingresa tu correo electrónico
-                  </Form.Message>
-                  <Form.Message className="text-sm text-red-500" match="typeMismatch">
-                    Por favor proporciona un correo electrónico válido
-                  </Form.Message>
-                </div>
-                <Form.Control asChild>
-                  <input
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                    type="email"
-                    required
-                    placeholder="juan@ejemplo.com"
-                  />
-                </Form.Control>
-              </Form.Field>
-              
-              <Form.Field name="phone">
-                <div className="flex items-baseline justify-between mb-2">
-                  <Form.Label className="text-sm font-medium">
-                    Teléfono
-                  </Form.Label>
-                  <Form.Message className="text-sm text-red-500" match="valueMissing">
-                    Por favor ingresa tu número de teléfono
-                  </Form.Message>
-                </div>
-                <Form.Control asChild>
-                  <input
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                    type="tel"
-                    required
-                    placeholder="+1 (555) 123-4567"
-                  />
-                </Form.Control>
-              </Form.Field>
-              
-              <Form.Field name="service">
-                <div className="flex items-baseline justify-between mb-2">
-                  <Form.Label className="text-sm font-medium">
-                    Tipo de Servicio
-                  </Form.Label>
-                </div>
-                <Form.Control asChild>
-                  <select
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  >
-                    <option value="">Selecciona un servicio</option>
-                    <option value="sports-injury">Lesiones Deportivas</option>
-                    <option value="daily-pain">Dolor por Actividad Diaria</option>
-                    <option value="custom-treatment">Tratamiento Personalizado</option>
-                    <option value="follow-up">Sesión de Seguimiento</option>
-                    <option value="consultation">Consulta Inicial</option>
-                  </select>
-                </Form.Control>
-              </Form.Field>
-              
-              <Form.Field name="message">
-                <div className="flex items-baseline justify-between mb-2">
-                  <Form.Label className="text-sm font-medium">
-                    Mensaje
-                  </Form.Label>
-                </div>
-                <Form.Control asChild>
-                  <textarea
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary min-h-[120px]"
-                    placeholder="Cuéntanos sobre tu condición o preguntas..."
-                  />
-                </Form.Control>
-              </Form.Field>
-              
-              <Form.Submit asChild>
-                <button className="btn-primary w-full mt-6">
-                  <Send className="h-5 w-5 mr-2" />
-                  Enviar Mensaje
-                </button>
-              </Form.Submit>
-            </Form.Root>
-          </motion.div>
-          
-          {/* Contact Info */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <div className="bg-background p-8 rounded-lg shadow-md mb-8">
-              <h3 className="text-2xl font-bold mb-6">Información de Contacto</h3>
-              
-              <div className="space-y-6">
-                {contactInfo.map((item, index) => (
-                  <a
-                    key={index}
-                    href={item.link}
-                    className="flex items-start hover:bg-gray-50 p-3 rounded-md transition-colors duration-200"
-                  >
-                    <div className="bg-primary bg-opacity-10 p-3 rounded-full mr-4">
-                      {item.icon}
-                    </div>
-                    <div>
-                      <h4 className="font-medium">{item.title}</h4>
-                      <p className="text-text-light">{item.value}</p>
-                    </div>
-                  </a>
+        </div>
+
+        <div className="mt-12 grid gap-8 lg:grid-cols-5">
+          <div className="lg:col-span-3">
+            <BookingForm />
+          </div>
+
+          <aside className="space-y-6 lg:col-span-2">
+            <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-border sm:p-8">
+              <h3 className="text-xl font-bold text-text md:text-2xl">Información de contacto</h3>
+              <ul className="mt-5 space-y-2">
+                {INFO.map(({ icon: Icon, title, value, href }) => (
+                  <li key={title}>
+                    <a
+                      href={href}
+                      target={href.startsWith("http") ? "_blank" : undefined}
+                      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                      className="-mx-3 flex items-start gap-4 rounded-md p-3 transition-colors hover:bg-accent"
+                    >
+                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                        <Icon className="h-5 w-5 text-primary" aria-hidden />
+                      </span>
+                      <span>
+                        <span className="block font-medium text-text">{title}</span>
+                        <span className="text-text-light">{value}</span>
+                      </span>
+                    </a>
+                  </li>
                 ))}
+                <li className="-mx-3 flex items-start gap-4 p-3">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                    <Clock className="h-5 w-5 text-primary" aria-hidden />
+                  </span>
+                  <span>
+                    <span className="block font-medium text-text">Horario de atención</span>
+                    {SITE.hours.map((h) => (
+                      <span key={h.days} className="block text-text-light">
+                        {h.days}: {h.open} a {h.close}
+                      </span>
+                    ))}
+                  </span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="rounded-2xl bg-primary p-6 text-background sm:p-8">
+              <h3 className="text-xl font-bold md:text-2xl">¿Necesitas atención urgente?</h3>
+              <p className="mt-2 text-background/85">Llámanos directamente para citas el mismo día.</p>
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row lg:flex-col xl:flex-row">
+                <Button asChild variant="onDark">
+                  <a href={`tel:${SITE.phoneTel}`}>
+                    <Phone />
+                    Llamar ahora
+                  </a>
+                </Button>
+                <Button asChild variant="outlineOnDark">
+                  <a href={whatsappLink("Hola, necesito una cita lo antes posible.")} target="_blank" rel="noopener noreferrer">
+                    WhatsApp
+                  </a>
+                </Button>
               </div>
             </div>
-            
-            <div className="bg-background p-8 rounded-lg shadow-md">
-              <h3 className="text-2xl font-bold mb-6">Agenda Cita Rápida</h3>
-              <div className="flex items-center justify-center bg-primary bg-opacity-10 p-6 rounded-lg mb-6">
-                <Calendar className="h-12 w-12 text-primary mr-4" />
-                <div>
-                  <p className="text-lg font-bold">¿Necesitas atención urgente?</p>
-                  <p className="text-text-light">
-                    Llámanos directamente para citas el mismo día
-                  </p>
-                </div>
-              </div>
-              <a href="https://wa.link/ma7xty" className="btn-primary w-full text-center">
-                Llamar Ahora
-              </a>
-            </div>
-          </motion.div>
+          </aside>
         </div>
       </div>
     </section>
   )
 }
-
-export default ContactSection

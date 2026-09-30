@@ -1,109 +1,94 @@
-"use client"
+import Image from "next/image"
+import { Award, Clock, MapPin, Shield, Star } from "lucide-react"
+import mainlogo from "@/assets/mainlogo.svg"
+import hero from "@/assets/hero.jpg"
+import { SITE } from "@/lib/site"
 
-import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
-import { Shield, Award, Clock, Star } from 'lucide-react'
-import Image from 'next/image'
-import mainlogo from '@/assets/mainlogo.svg'
+const FEATURES = [
+  {
+    icon: Shield,
+    title: "Equipo profesional",
+    description:
+      "Llevamos equipos de fisioterapia de nivel hospitalario directamente a tu puerta para los tratamientos más efectivos.",
+  },
+  {
+    icon: Award,
+    title: "Terapeutas certificados",
+    description:
+      "Nuestro equipo consta de profesionales licenciados con amplia formación y años de experiencia práctica.",
+  },
+  {
+    icon: Clock,
+    title: "Horarios flexibles",
+    description: "Programa citas en horarios que funcionen para ti, incluyendo tardes y fines de semana.",
+  },
+  {
+    icon: Star,
+    title: "Enfoque personalizado",
+    description:
+      "Cada plan de tratamiento está adaptado a tus necesidades específicas, condición y objetivos de recuperación.",
+  },
+]
 
-const AboutSection = () => {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, amount: 0.2 })
-  
-  const features = [
-    {
-      icon: <Shield className="h-10 w-10 text-primary" />,
-      title: 'Equipo Profesional',
-      description: 'Llevamos equipos de fisioterapia de nivel hospitalario directamente a tu puerta para los tratamientos más efectivos.'
-    },
-    {
-      icon: <Award className="h-10 w-10 text-primary" />,
-      title: 'Terapeutas Certificados',
-      description: 'Nuestro equipo consta de profesionales licenciados con amplia formación y años de experiencia práctica.'
-    },
-    {
-      icon: <Clock className="h-10 w-10 text-primary" />,
-      title: 'Horarios Flexibles',
-      description: 'Programa citas en horarios que funcionen para ti, incluyendo tardes y fines de semana.'
-    },
-    {
-      icon: <Star className="h-10 w-10 text-primary" />,
-      title: 'Enfoque Personalizado',
-      description: 'Cada plan de tratamiento está adaptado a tus necesidades específicas, condición y objetivos de recuperación.'
-    }
-  ]
-  
+export default function AboutSection() {
   return (
-    <section id="about" className="py-20 md:py-32 bg-background-alt">
+    <section id="about" className="section-y bg-background-alt">
       <div className="container">
-        <div ref={ref} className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-          {/* About Image */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="aspect-w-1 aspect-h-1 rounded-lg overflow-hidden">
-              <motion.div
-              initial={{ scale: 1.1 }}
-              whileHover={{ scale: 1 }}
-              transition={{ duration: 0.3 }}
-              >
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+          <div className="relative">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-2xl">
               <Image
-                src={mainlogo}
-                alt="Imagen del Equipo - Nuestros fisioterapeutas profesionales"
-                className="object-cover w-full h-full rounded"
-                width={500}
-                height={500}
-                priority
+                src={hero}
+                alt="Fisioterapeuta atendiendo a un paciente"
+                fill
+                sizes="(min-width: 1024px) 45vw, 100vw"
+                className="object-cover"
+                placeholder="blur"
               />
-              </motion.div>
             </div>
-          </motion.div>
-          
-          {/* About Content */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Sobre <span className="text-primary">Fisiogad</span>
-            </h2>
-            <p className="text-text-light mb-6">
-              En Fisioterapia y Rehabilitación Gad, ubicada en
-              Colonia del Valle, mejoramos tu salud y calidad
-              de vida con tratamientos personalizados de
-              fisioterapia y rehabilitación física. Atendemos
-              lesiones deportivas, problemas de columna
-              y procesos posoperatorios.
+            <a
+              href={SITE.mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="absolute -bottom-6 left-4 right-4 flex items-start gap-3 rounded-xl bg-white p-4 shadow-lg ring-1 ring-border transition-shadow hover:shadow-xl sm:left-auto sm:max-w-xs"
+            >
+              <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden />
+              <span className="text-sm text-text">
+                <span className="block font-semibold">Consultorio en Colonia Del Valle</span>
+                {SITE.address.street}, Benito Juárez. Ver en Google Maps
+              </span>
+            </a>
+          </div>
+
+          <div>
+            <Image src={mainlogo} alt="Fisiogad" className="mb-6 h-14 w-auto" />
+            <h2 className="text-text">Sobre Fisiogad</h2>
+            <p className="mt-5 text-lg text-text-light">
+              En {SITE.legalName}, ubicada en Colonia del Valle, mejoramos tu salud y calidad de vida con tratamientos
+              personalizados de fisioterapia y rehabilitación física. Atendemos lesiones deportivas, problemas de
+              columna y procesos posoperatorios.
             </p>
-            <p className="text-text-light mb-8">
-              Nuestro equipo profesional te acompaña en cada paso de tu
-              recuperación con atención cercana y enfocada
-              en tus necesidades. Tu bienestar es nuestra prioridad
+            <p className="mt-4 text-lg text-text-light">
+              Nuestro equipo profesional te acompaña en cada paso de tu recuperación con atención cercana y enfocada en
+              tus necesidades. Tu bienestar es nuestra prioridad.
             </p>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {features.map((feature, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
-                  className="bg-background p-6 rounded-lg shadow-sm"
-                >
-                  <div className="mb-4">{feature.icon}</div>
-                  <h3 className="text-lg font-bold mb-2">{feature.title}</h3>
-                  <p className="text-sm text-text-light">{feature.description}</p>
-                </motion.div>
+
+            <ul className="mt-10 grid gap-x-8 gap-y-7 sm:grid-cols-2">
+              {FEATURES.map(({ icon: Icon, title, description }) => (
+                <li key={title} className="flex gap-4">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                    <Icon className="h-5 w-5 text-primary" aria-hidden />
+                  </span>
+                  <div>
+                    <h3 className="text-lg font-semibold text-text md:text-lg">{title}</h3>
+                    <p className="mt-1 text-sm text-text-light">{description}</p>
+                  </div>
+                </li>
               ))}
-            </div>
-          </motion.div>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
   )
 }
-
-export default AboutSection

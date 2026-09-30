@@ -1,111 +1,67 @@
-"use client";
+"use client"
+import { motion } from "framer-motion"
+import { ArrowRight } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { BodyMap } from "@/components/features/body-map"
+import { NumberTicker } from "@/components/magicui/number-ticker"
 
-import { motion } from "framer-motion";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import Image from "next/image";
-import hero from "@/assets/hero.jpg";
+const STATS = [
+  { value: 5, suffix: "+", label: "Años de experiencia" },
+  { value: 100, suffix: "+", label: "Pacientes satisfechos" },
+  { value: 15, suffix: "+", label: "Tipos de tratamientos" },
+  { value: 30, suffix: "", label: "Certificaciones" },
+]
 
-const HeroSection = () => {
-    return (
-        <section
-            id="hero"
-            className="pt-32 pb-20 md:pt-40 md:pb-32 relative bg-background-alt"
-        >
-            <div className="container">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                    {/* Hero Content */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                    >
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-text">
-                            Fisioterapia Profesional{" "}
-                        </h1>
-                        <p className="text-lg md:text-xl text-text-light mb-8 max-w-lg">
-                            Tratamientos personalizados para lesiones
-                            deportivas, dolores por actividades diarias y
-                            rehabilitación utilizando equipo profesional y
-                            cuidado continuo.
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-4">
-                            <Link href="#contact" className="btn-primary">
-                                Agendar una Sesión
-                            </Link>
-                            <Link href="#services" className="btn-secondary">
-                                <span>Explorar Servicios</span>
-                                <ArrowRight className="ml-2 h-5 w-5" />
-                            </Link>
-                        </div>
-                    </motion.div>
-
-                    {/* Hero Image */}
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                        className="relative h-[400px] md:h-[500px] rounded-lg overflow-hidden"
-                    >
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="relative w-full h-full">
-                                <Image
-                                    src={hero}
-                                    alt="Fisioterapeuta atendiendo a un paciente"
-                                    layout="fill"
-                                    objectFit="cover"
-                                    className="rounded-lg"
-                                />
-                            </div>
-                        </div>
-                    </motion.div>
-                </div>
-
-                {/* Trust Markers */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.4 }}
-                    className="mt-20 py-8 px-6 bg-background rounded-lg shadow-md"
-                >
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-                        <div>
-                            <p className="text-3xl font-bold text-primary mb-2">
-                                5+
-                            </p>
-                            <p className="text-text-light">
-                                Años de Experiencia
-                            </p>
-                        </div>
-                        <div>
-                            <p className="text-3xl font-bold text-primary mb-2">
-                                100+
-                            </p>
-                            <p className="text-text-light">
-                                Pacientes Satisfechos
-                            </p>
-                        </div>
-                        <div>
-                            <p className="text-3xl font-bold text-primary mb-2">
-                                15+
-                            </p>
-                            <p className="text-text-light">
-                                Tipos de Tratamientos
-                            </p>
-                        </div>
-                        <div>
-                            <p className="text-3xl font-bold text-primary mb-2">
-                                30
-                            </p>
-                            <p className="text-text-light">
-                                Certificaciones
-                            </p>
-                        </div>
-                    </div>
-                </motion.div>
+export default function HeroSection() {
+  return (
+    <section id="hero" className="relative overflow-hidden bg-background-alt pb-16 pt-32 md:pb-24 md:pt-40">
+      <div aria-hidden className="bg-grid-brand pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_at_top_right,black,transparent_70%)]" />
+      <div className="container relative">
+        <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.15fr] lg:gap-12">
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <h1 className="text-4xl text-text md:text-5xl lg:text-[3.4rem] lg:leading-[1.08]">Fisioterapia profesional para lesiones deportivas y dolor diario</h1>
+            <p className="mt-6 max-w-lg text-lg text-text-light md:text-xl">
+              Tratamientos personalizados con equipo profesional y cuidado continuo. Dinos dónde te duele y agenda en
+              un minuto.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Button asChild size="lg">
+                <a href="#contact">Agendar una sesión</a>
+              </Button>
+              <Button asChild size="lg" variant="outline">
+                <a href="#services">
+                  Explorar servicios
+                  <ArrowRight />
+                </a>
+              </Button>
             </div>
-        </section>
-    );
-};
+          </motion.div>
 
-export default HeroSection;
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="rounded-2xl bg-background/80 p-4 shadow-lg ring-1 ring-border backdrop-blur sm:p-6"
+          >
+            <h2 className="mb-5 text-2xl font-bold text-text md:text-3xl">¿Dónde te duele?</h2>
+            <BodyMap />
+          </motion.div>
+        </div>
+
+        <dl className="mt-16 grid grid-cols-2 gap-8 border-t border-border pt-10 md:mt-20 md:grid-cols-4">
+          {STATS.map((s) => (
+            <div key={s.label}>
+              <dt className="sr-only">{s.label}</dt>
+              <dd className="text-4xl font-bold text-primary md:text-5xl font-display">
+                <NumberTicker value={s.value} suffix={s.suffix} />
+              </dd>
+              <p aria-hidden className="mt-1 text-text-light">
+                {s.label}
+              </p>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+  )
+}

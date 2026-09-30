@@ -2,36 +2,77 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 31, 41, 55; /* text-gray-800 */
-  --background-rgb: 251, 251, 251; /* Changed from white to #FBFBFB */
-  scroll-behavior: smooth;
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-rgb));
-}
-
 @layer base {
+  :root {
+    /* Paleta de marca Fisiogad: vino #8B0900, fondo #FBFBFB, texto #1F2937 */
+    --background: 0 0% 98.4%;
+    --foreground: 215 28% 17%;
+    --card: 0 0% 100%;
+    --card-foreground: 215 28% 17%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 28% 17%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 220 9% 40%;
+    --accent: 4 60% 96%;
+    --accent-foreground: 4 100% 27%;
+    --destructive: 0 72% 42%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 13% 88%;
+    --input: 220 13% 82%;
+    --ring: 4 100% 27%;
+    --radius: 0.375rem;
+    --foreground-rgb: 31, 41, 55;
+    --background-rgb: 251, 251, 251;
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    color: rgb(var(--foreground-rgb));
+    background: rgb(var(--background-rgb));
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+  .lenis.lenis-stopped { overflow: hidden; }
+
   h1, h2, h3, h4, h5, h6 {
-    @apply font-display font-bold;
+    @apply font-display font-semibold;
+    letter-spacing: -0.035em;
+    line-height: 1.02;
   }
-  
+
   h1 {
-    @apply text-4xl md:text-5xl lg:text-6xl;
+    font-size: clamp(3.25rem, 8.4vw, 7rem);
   }
-  
+
   h2 {
-    @apply text-3xl md:text-4xl lg:text-5xl;
+    font-size: clamp(2.5rem, 4.6vw, 4rem);
   }
-  
+
   h3 {
     @apply text-2xl md:text-3xl;
   }
-  
-  section {
-    @apply py-12 md:py-24;
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      scroll-behavior: auto;
+    }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
@@ -39,12 +80,22 @@ body {
   .container {
     @apply px-4 mx-auto max-w-7xl;
   }
-  
-  .btn-primary {
-    @apply inline-flex items-center justify-center px-6 py-3 text-base font-medium text-background transition-colors duration-200 bg-primary rounded-md hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary;
+
+  /* Los espaciados de sección se definen aquí para evitar conflictos de especificidad */
+  .section-y {
+    @apply py-16 sm:py-24 md:py-40;
   }
-  
-  .btn-secondary {
-    @apply inline-flex items-center justify-center px-6 py-3 text-base font-medium text-primary transition-colors duration-200 bg-background border border-primary rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary;
+
+  /* Subrayado que se dibuja al pasar el cursor */
+  .link-line {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .link-line:hover, .link-line:focus-visible {
+    background-size: 100% 1px;
   }
 }
+

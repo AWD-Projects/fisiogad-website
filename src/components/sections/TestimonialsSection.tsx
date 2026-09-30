@@ -1,204 +1,117 @@
-"use client";
+"use client"
+import { useEffect, useState } from "react"
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
+import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react"
+import { SectionShell } from "./section-shell"
+import { SITE } from "@/lib/site"
 
-import { useRef, useEffect } from "react";
-import { motion, useInView } from "framer-motion";
-import { Star } from "lucide-react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "@/styles/testimonials.css";
+// Se conserva el texto original de cada paciente; solo se corrigió ortografía evidente.
+const TESTIMONIALS = [
+  {
+    name: "Sofía Bañuelos",
+    role: "Jugadora de tocho",
+    content:
+      "Llevo varias sesiones con el equipo de Fisio GAD tras mi ruptura de ligamento cruzado anterior y no puedo estar más agradecida con todo lo que he avanzado. Las terapias han sido clave en mi recuperación y en mi regreso al tocho. Además, las sesiones de descarga muscular me han ayudado muchísimo en las temporadas. 100% recomendados!! Muy atentos y con el equipo necesario.",
+  },
+  {
+    name: "Elvia Escobar",
+    role: "Ama de casa",
+    content:
+      "Fui a rehabilitación por un dolor en la muñeca y desde la primera sesión sentí mucha mejoría, lo recomiendo.",
+  },
+  {
+    name: "Allberto Franco Pallas",
+    role: "Cliente frecuente",
+    content:
+      "El lugar está súper bonito, la atención es muy buena ya que son profesionales, les gusta su trabajo, salgo contento después de mi terapia, ¡100% recomendados!",
+  },
+]
 
-const testimonials = [
-    {
-        id: 1,
-        name: "Elvia Escobar",
-        role: "Ama de casa",
-        content:
-            "Fui a rehabilitación por un dolor en la muñeca y desde la primera sesión sentí mucha mejoria, lo recomiendo",
-        rating: 5,
-        image: "/placeholder-avatar.jpg",
-    },
-    {
-        id: 2,
-        name: "Allberto Franco Pallas",
-        role: "Cliente frecuente",
-        content:
-            "El lugar está super bonito, la atención es muy buena ya que son profesionales, les gusta su trabajo, salo contendo después de mi terapia, 100% recomendados!!!",
-        rating: 5,
-        image: "/placeholder-avatar.jpg",
-    },
-    {
-        id: 3,
-        name: "Sofía Bañuelos",
-        role: "Jugadora de tocho",
-        content:
-            "Llevo varias sesiones con el equipo de Fisio GAD tras mi ruptura de ligamento cruzado anterior y no puedo estar más agradecida con todo lo que he avanzado. Las terapias han sido clave en mi recuperación y en mi regreso al tocho. Además, las sesiones de descarga muscular me han ayudado muchísimo en las temporadas. 100% recomendados!! Muy atentos y con el equipo necesario.",
-        rating: 5,
-        image: "/placeholder-avatar.jpg",
-    },
-];
+const EASE = [0.22, 1, 0.36, 1] as const
 
-const TestimonialsSection = () => {
-    const ref = useRef(null);
-    const isInView = useInView(ref, { once: true, amount: 0.2 });
+export default function TestimonialsSection() {
+  const reduce = useReducedMotion()
+  const [i, setI] = useState(0)
+  const [paused, setPaused] = useState(false)
+  const t = TESTIMONIALS[i]
+  const n = TESTIMONIALS.length
 
-    useEffect(() => {
-        // Ajustar altura al cargar el componente
-        const updateHeight = () => {
-            const swiperSlides = document.querySelectorAll(
-                ".testimonials-swiper .swiper-slide"
-            );
-            let maxHeight = 0;
+  useEffect(() => {
+    if (paused || reduce) return
+    const id = setInterval(() => setI((v) => (v + 1) % n), 9000)
+    return () => clearInterval(id)
+  }, [paused, reduce, n])
 
-            // Reiniciar estilos para calcular la altura natural
-            swiperSlides.forEach((slide) => {
-                const slideElement = slide as HTMLElement;
-                slideElement.style.height = "auto";
-            });
+  const go = (d: number) => setI((v) => (v + d + n) % n)
 
-            // Encontrar la altura máxima
-            swiperSlides.forEach((slide) => {
-                const slideElement = slide as HTMLElement;
-                maxHeight = Math.max(maxHeight, slideElement.offsetHeight);
-            });
+  return (
+    <SectionShell
+      id="testimonials"
+      title="Lo que dicen nuestros pacientes"
+      aside={
+        <a
+          href={SITE.mapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group inline-flex items-center gap-2 text-primary"
+        >
+          <span className="link-line">Ver reseñas en Google</span>
+          <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+        </a>
+      }
+    >
+      <div
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+        onFocus={() => setPaused(true)}
+        onBlur={() => setPaused(false)}
+      >
+        <div className="min-h-[20rem] sm:min-h-[22rem] md:min-h-[26rem]" aria-live="polite">
+          <AnimatePresence mode="wait">
+            <motion.figure
+              key={i}
+              initial={reduce ? false : { opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.55, ease: EASE }}
+            >
+              <blockquote
+                className={`font-display font-medium tracking-tight text-text ${
+                  t.content.length > 220 ? "text-2xl leading-snug md:text-[2rem]" : "text-3xl leading-tight md:text-5xl"
+                }`}
+              >
+                “{t.content}”
+              </blockquote>
+              <figcaption className="mt-10">
+                <span className="block text-lg font-semibold text-text">{t.name}</span>
+                <span className="text-text-light">{t.role}</span>
+              </figcaption>
+            </motion.figure>
+          </AnimatePresence>
+        </div>
 
-            // Aplicar la altura máxima a todos los slides
-            if (maxHeight > 0) {
-                swiperSlides.forEach((slide) => {
-                    const slideElement = slide as HTMLElement;
-                    slideElement.style.height = `${maxHeight}px`;
-                });
-            }
-        };
-
-        // Actualizar después de cargar y cuando cambie el tamaño de ventana
-        window.addEventListener("load", updateHeight);
-        window.addEventListener("resize", updateHeight);
-
-        // Ajuste inicial después de que el componente se monte
-        const timer = setTimeout(updateHeight, 500);
-
-        return () => {
-            window.removeEventListener("load", updateHeight);
-            window.removeEventListener("resize", updateHeight);
-            clearTimeout(timer);
-        };
-    }, []);
-
-    return (
-        <section id="testimonials" className="py-20 md:py-32 bg-background">
-            <div className="container">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.5 }}
-                    className="text-center max-w-3xl mx-auto mb-16"
-                >
-                    <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                        Lo que Dicen{" "}
-                        <span className="text-primary">Nuestros Pacientes</span>
-                    </h2>
-                    <p className="text-text-light text-lg">
-                        No te quedes solo con nuestra palabra. Esto es lo que
-                        nuestros pacientes dicen sobre sus experiencias con los
-                        servicios de fisioterapia a domicilio de Fisiogad.
-                    </p>
-                </motion.div>
-
-                <div ref={ref} className="relative">
-                    <Swiper
-                        modules={[Navigation, Pagination, Autoplay]}
-                        spaceBetween={30}
-                        slidesPerView={1}
-                        breakpoints={{
-                            640: {
-                                slidesPerView: 2,
-                            },
-                            1024: {
-                                slidesPerView: 3,
-                            },
-                        }}
-                        pagination={{ clickable: true }}
-                        autoplay={{ delay: 5000, disableOnInteraction: false }}
-                        className="testimonials-swiper"
-                        onSwiper={(swiper) => {
-                            // Actualizar altura después de que el swiper se inicialice
-                            setTimeout(() => {
-                                const swiperSlides = document.querySelectorAll(
-                                    ".testimonials-swiper .swiper-slide"
-                                );
-                                let maxHeight = 0;
-
-                                swiperSlides.forEach((slide) => {
-                                    const slideElement = slide as HTMLElement;
-                                    maxHeight = Math.max(
-                                        maxHeight,
-                                        slideElement.offsetHeight
-                                    );
-                                });
-
-                                if (maxHeight > 0) {
-                                    swiperSlides.forEach((slide) => {
-                                        const slideElement =
-                                            slide as HTMLElement;
-                                        slideElement.style.height = `${maxHeight}px`;
-                                    });
-                                }
-                            }, 100);
-                        }}
-                    >
-                        {testimonials.map((testimonial) => (
-                            <SwiperSlide
-                                key={testimonial.id}
-                                className="h-auto"
-                            >
-                                <motion.div
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={
-                                        isInView ? { opacity: 1, y: 0 } : {}
-                                    }
-                                    transition={{ duration: 0.5, delay: 0.2 }}
-                                    className="bg-background-alt p-8 rounded-lg shadow-sm h-full flex flex-col testimonial-card"
-                                >
-                                    <div className="flex items-center mb-4">
-                                        <div>
-                                            <h3 className="font-bold">
-                                                {testimonial.name}
-                                            </h3>
-                                            <p className="text-sm text-text-light">
-                                                {testimonial.role}
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="flex mb-4">
-                                        {[...Array(5)].map((_, i) => (
-                                            <Star
-                                                key={i}
-                                                className={`h-5 w-5 ${
-                                                    i < testimonial.rating
-                                                        ? "text-yellow-400 fill-yellow-400"
-                                                        : "text-gray-300"
-                                                }`}
-                                            />
-                                        ))}
-                                    </div>
-
-                                    <div className="testimonial-content flex-grow">
-                                        <p className="text-text-light mb-0">
-                                            &quot;{testimonial.content}&quot;
-                                        </p>
-                                    </div>
-                                </motion.div>
-                            </SwiperSlide>
-                        ))}
-                    </Swiper>
-                </div>
-            </div>
-        </section>
-    );
-};
-
-export default TestimonialsSection;
+        <div className="mt-10 flex items-center justify-between border-t border-border pt-6">
+          <p className="tabular-nums text-text-light" aria-hidden>
+            {i + 1} / {n}
+          </p>
+          <div className="flex gap-3">
+            {[
+              { label: "Testimonio anterior", d: -1, Icon: ArrowLeft },
+              { label: "Siguiente testimonio", d: 1, Icon: ArrowRight },
+            ].map(({ label, d, Icon }) => (
+              <button
+                key={label}
+                type="button"
+                onClick={() => go(d)}
+                aria-label={label}
+                className="flex h-12 w-12 items-center justify-center rounded-full border border-border text-text transition-all duration-300 hover:border-primary hover:bg-primary hover:text-background active:scale-95"
+              >
+                <Icon className="h-5 w-5" />
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </SectionShell>
+  )
+}

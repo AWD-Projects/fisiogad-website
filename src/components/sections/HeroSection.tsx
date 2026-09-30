@@ -1,111 +1,57 @@
-"use client";
+"use client"
+import { ArrowRight } from "lucide-react"
+import { BodyFigure } from "@/components/features/body-figure"
+import { Magnetic } from "@/components/motion/magnetic"
+import { Reveal, SplitHeading } from "@/components/motion/reveal"
+import { Button } from "@/components/ui/button"
+import { SITE } from "@/lib/site"
+import { track } from "@/lib/analytics"
 
-import { motion } from "framer-motion";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import Image from "next/image";
-import hero from "@/assets/hero.jpg";
+export default function HeroSection() {
+  return (
+    <section id="hero" className="relative lg:min-h-[100svh]">
+      <div className="container relative z-10 pointer-events-none lg:absolute lg:inset-0 lg:mx-auto">
+        <div className="pointer-events-none flex h-full flex-col justify-center pb-16 pt-36 lg:w-[58%] lg:pb-14 lg:pt-32">
+          <div className="pointer-events-auto">
+            <SplitHeading as="h1" text="Fisioterapia profesional" onLoad delay={0.15} className="max-w-[10ch]" />
+            <Reveal onLoad delay={0.7} className="mt-8 max-w-md">
+              <p className="text-xl text-text-light">
+                Para lesiones deportivas y dolor del día a día. Toca la zona que te duele y agenda en un minuto.
+              </p>
+            </Reveal>
+            <Reveal onLoad delay={0.85} className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+              <Magnetic>
+                <Button asChild size="lg">
+                  <a href="#contact" onClick={() => track("cta_click", { source: "hero" })}>
+                    Agendar una sesión
+                    <ArrowRight className="arrow" />
+                  </a>
+                </Button>
+              </Magnetic>
+              <a href="#services" className="link-line text-lg text-text">
+                Ver servicios
+              </a>
+            </Reveal>
+          </div>
 
-const HeroSection = () => {
-    return (
-        <section
-            id="hero"
-            className="pt-32 pb-20 md:pt-40 md:pb-32 relative bg-background-alt"
-        >
-            <div className="container">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                    {/* Hero Content */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                    >
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-text">
-                            Fisioterapia Profesional{" "}
-                        </h1>
-                        <p className="text-lg md:text-xl text-text-light mb-8 max-w-lg">
-                            Tratamientos personalizados para lesiones
-                            deportivas, dolores por actividades diarias y
-                            rehabilitación utilizando equipo profesional y
-                            cuidado continuo.
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-4">
-                            <Link href="#contact" className="btn-primary">
-                                Agendar una Sesión
-                            </Link>
-                            <Link href="#services" className="btn-secondary">
-                                <span>Explorar Servicios</span>
-                                <ArrowRight className="ml-2 h-5 w-5" />
-                            </Link>
-                        </div>
-                    </motion.div>
+          <Reveal onLoad delay={1.1} className="pointer-events-auto mt-16 hidden border-t border-border pt-5 text-sm text-text-light lg:block lg:mt-auto">
+            <p>
+              {SITE.address.colony}, {SITE.address.city}
+              <span className="mx-3 text-border">/</span>
+              Lun a Vie 9:00 a 18:00
+              <span className="mx-3 text-border">/</span>
+              Sáb 9:00 a 14:00
+            </p>
+          </Reveal>
+        </div>
+      </div>
+      {/* Panel de marca a sangre: solo escritorio; en móvil va debajo del titular */}
+      <div className="relative z-0 bg-primary px-4 py-16 lg:absolute lg:inset-y-0 lg:right-0 lg:w-[38%] lg:px-12 lg:pb-12 lg:pt-28">
+        <div className="mx-auto h-[38rem] max-w-md lg:h-full lg:max-w-none">
+          <BodyFigure />
+        </div>
+      </div>
 
-                    {/* Hero Image */}
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                        className="relative h-[400px] md:h-[500px] rounded-lg overflow-hidden"
-                    >
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="relative w-full h-full">
-                                <Image
-                                    src={hero}
-                                    alt="Fisioterapeuta atendiendo a un paciente"
-                                    layout="fill"
-                                    objectFit="cover"
-                                    className="rounded-lg"
-                                />
-                            </div>
-                        </div>
-                    </motion.div>
-                </div>
-
-                {/* Trust Markers */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.4 }}
-                    className="mt-20 py-8 px-6 bg-background rounded-lg shadow-md"
-                >
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-                        <div>
-                            <p className="text-3xl font-bold text-primary mb-2">
-                                5+
-                            </p>
-                            <p className="text-text-light">
-                                Años de Experiencia
-                            </p>
-                        </div>
-                        <div>
-                            <p className="text-3xl font-bold text-primary mb-2">
-                                100+
-                            </p>
-                            <p className="text-text-light">
-                                Pacientes Satisfechos
-                            </p>
-                        </div>
-                        <div>
-                            <p className="text-3xl font-bold text-primary mb-2">
-                                15+
-                            </p>
-                            <p className="text-text-light">
-                                Tipos de Tratamientos
-                            </p>
-                        </div>
-                        <div>
-                            <p className="text-3xl font-bold text-primary mb-2">
-                                30
-                            </p>
-                            <p className="text-text-light">
-                                Certificaciones
-                            </p>
-                        </div>
-                    </div>
-                </motion.div>
-            </div>
-        </section>
-    );
-};
-
-export default HeroSection;
+    </section>
+  )
+}

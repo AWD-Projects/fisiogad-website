@@ -1,109 +1,110 @@
 "use client"
+import { useRef } from "react"
+import Image from "next/image"
+import { motion, useScroll, useTransform } from "framer-motion"
+import { ArrowUpRight } from "lucide-react"
+import photo from "@/assets/services/follow.jpg"
+import { SectionShell } from "./section-shell"
+import { Reveal } from "@/components/motion/reveal"
+import { NumberTicker } from "@/components/magicui/number-ticker"
+import { SITE } from "@/lib/site"
 
-import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
-import { Shield, Award, Clock, Star } from 'lucide-react'
-import Image from 'next/image'
-import mainlogo from '@/assets/mainlogo.svg'
+const FEATURES = [
+  {
+    title: "Equipo profesional",
+    text: "Llevamos equipos de fisioterapia de nivel hospitalario directamente a tu puerta para los tratamientos más efectivos.",
+  },
+  {
+    title: "Terapeutas certificados",
+    text: "Profesionales licenciados con amplia formación y años de experiencia práctica.",
+  },
+  {
+    title: "Horarios flexibles",
+    text: "Programa citas en horarios que funcionen para ti, incluyendo tardes y fines de semana.",
+  },
+  {
+    title: "Enfoque personalizado",
+    text: "Cada plan está adaptado a tus necesidades específicas, condición y objetivos de recuperación.",
+  },
+]
 
-const AboutSection = () => {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, amount: 0.2 })
-  
-  const features = [
-    {
-      icon: <Shield className="h-10 w-10 text-primary" />,
-      title: 'Equipo Profesional',
-      description: 'Llevamos equipos de fisioterapia de nivel hospitalario directamente a tu puerta para los tratamientos más efectivos.'
-    },
-    {
-      icon: <Award className="h-10 w-10 text-primary" />,
-      title: 'Terapeutas Certificados',
-      description: 'Nuestro equipo consta de profesionales licenciados con amplia formación y años de experiencia práctica.'
-    },
-    {
-      icon: <Clock className="h-10 w-10 text-primary" />,
-      title: 'Horarios Flexibles',
-      description: 'Programa citas en horarios que funcionen para ti, incluyendo tardes y fines de semana.'
-    },
-    {
-      icon: <Star className="h-10 w-10 text-primary" />,
-      title: 'Enfoque Personalizado',
-      description: 'Cada plan de tratamiento está adaptado a tus necesidades específicas, condición y objetivos de recuperación.'
-    }
-  ]
-  
+const NUMBERS = [
+  { value: 5, suffix: "+", label: "años de experiencia" },
+  { value: 100, suffix: "+", label: "pacientes satisfechos" },
+  { value: 30, suffix: "", label: "certificaciones" },
+]
+
+export default function AboutSection() {
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] })
+  const imgY = useTransform(scrollYProgress, [0, 1], ["-9%", "9%"])
+  const clip = useTransform(scrollYProgress, [0, 0.35], ["inset(12% 12% 12% 12%)", "inset(0% 0% 0% 0%)"])
+
   return (
-    <section id="about" className="py-20 md:py-32 bg-background-alt">
-      <div className="container">
-        <div ref={ref} className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-          {/* About Image */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="aspect-w-1 aspect-h-1 rounded-lg overflow-hidden">
-              <motion.div
-              initial={{ scale: 1.1 }}
-              whileHover={{ scale: 1 }}
-              transition={{ duration: 0.3 }}
-              >
-              <Image
-                src={mainlogo}
-                alt="Imagen del Equipo - Nuestros fisioterapeutas profesionales"
-                className="object-cover w-full h-full rounded"
-                width={500}
-                height={500}
-                priority
-              />
-              </motion.div>
-            </div>
+    <SectionShell id="about" title="Sobre Fisiogad">
+      <Reveal>
+        <p className="font-display text-2xl font-medium leading-snug tracking-tight text-text md:text-[2rem]">
+          En {SITE.legalName}, ubicada en Colonia del Valle, mejoramos tu salud y calidad de vida con tratamientos
+          personalizados de fisioterapia y rehabilitación física.
+        </p>
+        <p className="mt-6 max-w-xl text-lg text-text-light">
+          Atendemos lesiones deportivas, problemas de columna y procesos posoperatorios. Nuestro equipo te acompaña en
+          cada paso de tu recuperación con atención cercana y enfocada en tus necesidades.
+        </p>
+      </Reveal>
+
+      <div ref={ref} className="mt-16">
+        <motion.div style={{ clipPath: clip }} className="relative aspect-[16/10] overflow-hidden bg-muted">
+          <motion.div style={{ y: imgY }} className="absolute -inset-y-[12%] inset-x-0">
+            <Image
+              src={photo}
+              alt="Vendaje neuromuscular en rodilla durante una sesión de fisioterapia"
+              fill
+              sizes="(min-width: 1024px) 60vw, 100vw"
+              placeholder="blur"
+              className="object-cover object-center grayscale contrast-125"
+            />
           </motion.div>
-          
-          {/* About Content */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Sobre <span className="text-primary">Fisiogad</span>
-            </h2>
-            <p className="text-text-light mb-6">
-              En Fisioterapia y Rehabilitación Gad, ubicada en
-              Colonia del Valle, mejoramos tu salud y calidad
-              de vida con tratamientos personalizados de
-              fisioterapia y rehabilitación física. Atendemos
-              lesiones deportivas, problemas de columna
-              y procesos posoperatorios.
-            </p>
-            <p className="text-text-light mb-8">
-              Nuestro equipo profesional te acompaña en cada paso de tu
-              recuperación con atención cercana y enfocada
-              en tus necesidades. Tu bienestar es nuestra prioridad
-            </p>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {features.map((feature, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
-                  className="bg-background p-6 rounded-lg shadow-sm"
-                >
-                  <div className="mb-4">{feature.icon}</div>
-                  <h3 className="text-lg font-bold mb-2">{feature.title}</h3>
-                  <p className="text-sm text-text-light">{feature.description}</p>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
+          {/* Tinte de marca sobre la foto para unificar cualquier imagen */}
+          <div aria-hidden className="absolute inset-0 bg-primary/30 mix-blend-multiply" />
+        </motion.div>
+        <a
+          href={SITE.mapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group mt-4 inline-flex items-center gap-2 text-text-light hover:text-primary"
+        >
+          <span className="link-line">
+            {SITE.address.street}, {SITE.address.colony}
+          </span>
+          <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+        </a>
       </div>
-    </section>
+
+      <dl className="mt-20 border-t border-border">
+        {FEATURES.map((f) => (
+          <Reveal key={f.title} y={16}>
+            <div className="grid gap-2 border-b border-border py-6 md:grid-cols-[1fr_1.6fr] md:gap-8">
+              <dt className="font-display text-xl font-semibold tracking-tight text-text">{f.title}</dt>
+              <dd className="text-text-light">{f.text}</dd>
+            </div>
+          </Reveal>
+        ))}
+      </dl>
+
+      <dl className="mt-20 grid grid-cols-3 gap-6">
+        {NUMBERS.map((n) => (
+          <div key={n.label}>
+            <dt className="sr-only">{n.label}</dt>
+            <dd className="font-display text-4xl font-semibold tracking-tight text-primary md:text-6xl">
+              <NumberTicker value={n.value} suffix={n.suffix} />
+            </dd>
+            <p aria-hidden className="mt-2 text-sm text-text-light md:text-base">
+              {n.label}
+            </p>
+          </div>
+        ))}
+      </dl>
+    </SectionShell>
   )
 }
-
-export default AboutSection
